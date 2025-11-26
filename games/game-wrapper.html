@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game - Life Arcade</title>
+  <style>
+    /* ===== LOCAL FONTS (Offline) ===== */
+    @font-face {
+      font-family: 'Google Sans Flex';
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+      src: url('/conways-arcade-online/fonts/GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'Google Sans Mono';
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+      src: url('/conways-arcade-online/fonts/Google-Sans-Mono-Regular.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'Google Sans Mono';
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+      src: url('/conways-arcade-online/fonts/Google-Sans-Mono-SemiBold.ttf') format('truetype');
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      /* background-color removed - set by JavaScript applyTheme() */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Google Sans Flex', Arial, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Game header overlay */
+    #game-header {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(1200px, 100vw);
+      max-width: 100vw;
+      height: clamp(100px, 10vh, 200px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 clamp(40px, 6.67vw, 80px);
+      box-sizing: border-box;
+      z-index: 1000;
+      pointer-events: none;
+      gap: clamp(20px, 3vw, 60px);
+    }
+
+    #game-title {
+      color: #202124;
+      font-size: clamp(36px, 3.65vh, 70px);
+      font-family: 'Google Sans Flex', Arial, sans-serif;
+      font-weight: 500;
+      line-height: 1;
+      margin: 0;
+    }
+
+    .game-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(10px, 1.15vh, 22px);
+    }
+
+    .stat-label {
+      color: #202124;
+      font-size: clamp(24px, 2.34vh, 45px);
+      font-family: 'Google Sans Flex', Arial, sans-serif;
+      font-weight: 500;
+      line-height: 1;
+      margin: 0;
+    }
+
+    .stat-value {
+      color: #202124;
+      font-size: clamp(36px, 3.65vh, 70px);
+      font-family: 'Google Sans Flex', Arial, sans-serif;
+      font-weight: 500;
+      line-height: 1;
+      margin: 0;
+    }
+
+    #game-stats {
+      display: flex;
+      gap: clamp(30px, 4vw, 80px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Game header overlay -->
+  <div id="game-header">
+    <h1 id="game-title">Game</h1>
+    <div id="game-stats">
+      <div class="game-stat">
+        <div class="stat-label">Score</div>
+        <div class="stat-value" id="score-value">0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- p5.js (Local - Offline) -->
+  <script src="/conways-arcade-online/lib/p5.min.js"></script>
+  <script type="module">
+    // ===== IMPORTS =====
+    // IMPORTANT: Use GameRegistryMetadata.js (lightweight ~2KB), NOT GameRegistry.js (~500KB)
+    // GameRegistry.js imports .txt files which are unnecessary for game-wrapper.html
+    // We only need game title and paths, not full prompt/thinking texts.
+    import { getBackgroundColor, getTextColor } from '/conways-arcade-online/src/utils/ThemeConstants.js'
+    import { debugLog } from '/conways-arcade-online/src/utils/Logger.js'
+    import { getGameMetadataById } from '/conways-arcade-online/src/installation/GameRegistryMetadata.js'
+
+    // ===== INITIAL THEME FROM URL =====
+    // Apply theme IMMEDIATELY to prevent white flash
+    const urlParams = new URLSearchParams(window.location.search)
+    const initialTheme = urlParams.get('theme') || 'day'
+
+    // Track current theme to prevent redundant applications
+    let currentTheme = null
+
+    // Apply theme to body and header BEFORE game loads
+    applyTheme(initialTheme, true)
+
+    /**
+     * Apply theme colors to wrapper elements
+     * @param {string} theme - 'day' or 'night'
+     * @param {boolean} updateBodyBg - Whether to update body background (true on initial load only)
+     */
+    function applyTheme(theme, updateBodyBg = false) {
+      // Guard: Skip if already applied (unless updating body)
+      if (theme === currentTheme && !updateBodyBg) {
+        return
+      }
+      currentTheme = theme
+
+      const textColor = getTextColor(theme)
+
+      // Apply to body background (only on initial load)
+      if (updateBodyBg) {
+        const bgColor = getBackgroundColor(theme)
+        document.body.style.backgroundColor = bgColor
+      }
+
+      // Apply to header elements
+      document.getElementById('game-title').style.color = textColor
+      document.querySelectorAll('.stat-label').forEach(el => el.style.color = textColor)
+      document.querySelectorAll('.stat-value').forEach(el => el.style.color = textColor)
+
+      debugLog(`game-wrapper: Theme applied: ${theme}`)
+    }
+
+    // Get game name from URL parameter
+    const gameName = urlParams.get('game')
+
+    if (!gameName) {
+      console.error('No game specified in URL parameter')
+      document.body.innerHTML = '<h1 style="color: #EA4335;">Error: No game specified</h1>'
+    } else {
+      // Get game metadata (lightweight, no .txt content loaded)
+      const gameData = getGameMetadataById(gameName)
+
+      if (!gameData) {
+        console.error(`Game not found in registry: ${gameName}`)
+        document.body.innerHTML = `<h1 style="color: #EA4335;">Error: Game "${gameName}" not found</h1>`
+      } else {
+        // Set game title from metadata
+        document.getElementById('game-title').textContent = gameData.name
+
+        // Note: Score is updated directly by the game script via DOM manipulation
+
+        // Dynamically load the game script
+        const script = document.createElement('script')
+        script.type = 'module'
+        script.src = `/conways-arcade-online/games/${gameName}.js`
+        script.onerror = () => {
+          console.error(`Failed to load game: ${gameName}`)
+          document.body.innerHTML = `<h1 style="color: #EA4335;">Error: Game "${gameName}" not found</h1>`
+        }
+        document.body.appendChild(script)
+
+        console.log(`Loading game: ${gameName} (${gameData.name})`)
+      }
+    }
+
+    // ===== THEME SYSTEM =====
+    // Listen for theme changes from parent window
+    window.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'themeChange') {
+        const theme = event.data.payload?.theme
+        if (theme === 'day' || theme === 'night') {
+          applyTheme(theme)  // Uses unified function (without body BG update)
+        }
+      }
+    })
+
+    // ===== KEYBOARD INTERCEPTOR =====
+    // Intercept system keys (Escape, 1-8) BEFORE they reach the game
+    window.addEventListener('keydown', (e) => {
+      // Handle Escape key - Exit game
+      if (e.key === 'Escape') {
+        e.preventDefault()  // Prevent game from receiving
+        e.stopPropagation() // Stop propagation
+        debugLog('game-wrapper: Escape pressed - sending exitGame message')
+        window.parent.postMessage({ type: 'exitGame' }, '*')
+        return
+      }
+
+      // Handle theme keys (1-8)
+      const themeKeys = ['1', '2', '3', '4', '5', '6', '7', '8']
+      if (themeKeys.includes(e.key)) {
+        e.preventDefault()  // Prevent game from receiving
+        e.stopPropagation() // Stop propagation
+
+        // Determine theme from key
+        const theme = ['1', '2', '3', '4'].includes(e.key) ? 'day' : 'night'
+
+        debugLog(`game-wrapper: Theme key ${e.key} pressed - changing to ${theme}`)
+
+        // 1. Apply theme locally (update header text color)
+        applyTheme(theme)
+
+        // 2. Notify parent window to sync theme
+        window.parent.postMessage({
+          type: 'themeChangeFromGame',
+          payload: { theme }
+        }, '*')
+
+        return
+      }
+
+      // Other keys → let them reach the game (do nothing)
+    }, { capture: true })  // Use capture phase to intercept BEFORE p5.js
+
+    debugLog('game-wrapper: Keyboard interceptor initialized (Escape, 1-8)')
+  </script>
+</body>
+</html>

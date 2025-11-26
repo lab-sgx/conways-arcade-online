@@ -1,0 +1,7 @@
+My design philosophy for "Trail of Life" was to transform the passive tail of the original game into an active, <span class="highlight red">autonomous threat</span>.
+
+I reasoned that in the standard game, the tail is merely an obstacle of geometry; in this version, the tail is a <span class="highlight green">biological hazard</span>. The critical design challenge was the "safe zone" behind the head. If the rules applied instantly, the tail would disintegrate immediately. Therefore, I implemented a <span class="highlight yellow">"gestation delay"</span> logic: the cells dropped by the player are inert for a few frames, acting as a wall, before "waking up" and following the simulation rules.
+
+This forces the player to think about the shape they are drawing. A straight line is safe (it evaporates in GofL), but a sharp U-turn creates a 3-cell cluster that might spawn a stable "Block" or an exploding "Pentomino." I realized this turns the game into a spatial puzzle: the player must eat food to grow, but must move in patterns that result in <span class="highlight blue">self-destructing tails</span> to keep the arena clean. 
+
+The "Game Over" condition becomes emergent; you aren't just trapping yourself in a corner; you are accidentally building a <span class="highlight blue">"Glider Gun"</span> that snipes you from across the map. This shifts the cognitive load from pure reflex to <span class="highlight red">predictive pattern management</span>, where every turn is a seed for future chaos.
