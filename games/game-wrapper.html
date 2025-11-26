@@ -11,7 +11,7 @@
       font-weight: 500;
       font-style: normal;
       font-display: swap;
-      src: url('/conways-arcade-online/fonts/GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf') format('truetype');
+      src: url('/fonts/GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf') format('truetype');
     }
 
     @font-face {
@@ -19,7 +19,7 @@
       font-weight: 400;
       font-style: normal;
       font-display: swap;
-      src: url('/conways-arcade-online/fonts/Google-Sans-Mono-Regular.ttf') format('truetype');
+      src: url('/fonts/Google-Sans-Mono-Regular.ttf') format('truetype');
     }
 
     @font-face {
@@ -27,7 +27,7 @@
       font-weight: 600;
       font-style: normal;
       font-display: swap;
-      src: url('/conways-arcade-online/fonts/Google-Sans-Mono-SemiBold.ttf') format('truetype');
+      src: url('/fonts/Google-Sans-Mono-SemiBold.ttf') format('truetype');
     }
 
     body {
@@ -115,15 +115,15 @@
   </div>
 
   <!-- p5.js (Local - Offline) -->
-  <script src="/conways-arcade-online/lib/p5.min.js"></script>
+  <script src="/lib/p5.min.js"></script>
   <script type="module">
     // ===== IMPORTS =====
     // IMPORTANT: Use GameRegistryMetadata.js (lightweight ~2KB), NOT GameRegistry.js (~500KB)
     // GameRegistry.js imports .txt files which are unnecessary for game-wrapper.html
     // We only need game title and paths, not full prompt/thinking texts.
-    import { getBackgroundColor, getTextColor } from '/conways-arcade-online/src/utils/ThemeConstants.js'
-    import { debugLog } from '/conways-arcade-online/src/utils/Logger.js'
-    import { getGameMetadataById } from '/conways-arcade-online/src/installation/GameRegistryMetadata.js'
+    import { getBackgroundColor, getTextColor } from '/src/utils/ThemeConstants.js'
+    import { debugLog } from '/src/utils/Logger.js'
+    import { getGameMetadataById } from '/src/installation/GameRegistryMetadata.js'
 
     // ===== INITIAL THEME FROM URL =====
     // Apply theme IMMEDIATELY to prevent white flash
@@ -134,27 +134,24 @@
     let currentTheme = null
 
     // Apply theme to body and header BEFORE game loads
-    applyTheme(initialTheme, true)
+    applyTheme(initialTheme)
 
     /**
      * Apply theme colors to wrapper elements
      * @param {string} theme - 'day' or 'night'
-     * @param {boolean} updateBodyBg - Whether to update body background (true on initial load only)
      */
-    function applyTheme(theme, updateBodyBg = false) {
-      // Guard: Skip if already applied (unless updating body)
-      if (theme === currentTheme && !updateBodyBg) {
+    function applyTheme(theme) {
+      // Guard: Skip if already applied
+      if (theme === currentTheme) {
         return
       }
       currentTheme = theme
 
       const textColor = getTextColor(theme)
+      const bgColor = getBackgroundColor(theme)
 
-      // Apply to body background (only on initial load)
-      if (updateBodyBg) {
-        const bgColor = getBackgroundColor(theme)
-        document.body.style.backgroundColor = bgColor
-      }
+      // Apply to body background (ALWAYS - fixes white/black line bug on theme change)
+      document.body.style.backgroundColor = bgColor
 
       // Apply to header elements
       document.getElementById('game-title').style.color = textColor
@@ -186,7 +183,7 @@
         // Dynamically load the game script
         const script = document.createElement('script')
         script.type = 'module'
-        script.src = `/conways-arcade-online/games/${gameName}.js`
+        script.src = `/games/${gameName}.js`
         script.onerror = () => {
           console.error(`Failed to load game: ${gameName}`)
           document.body.innerHTML = `<h1 style="color: #EA4335;">Error: Game "${gameName}" not found</h1>`

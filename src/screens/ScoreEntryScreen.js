@@ -104,6 +104,7 @@ export class ScoreEntryScreen {
           align-items: center;
           justify-content: center;
           height: 100%;
+          padding-bottom: clamp(160px, 20cqh, 384px);
           font-family: 'Google Sans Flex', Arial, sans-serif;
         }
 
@@ -120,9 +121,10 @@ export class ScoreEntryScreen {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: space-between;
+          justify-content: center;
+          gap: clamp(60px, 7.5cqh, 144px);
           height: 100%;
-          padding: clamp(60px, 7.6cqh, 146px) clamp(45px, 9cqw, 108px);
+          padding-bottom: clamp(160px, 20cqh, 384px);
           font-family: 'Google Sans Flex', Arial, sans-serif;
           animation: fadeIn 0.5s ease-in;
         }
@@ -171,21 +173,26 @@ export class ScoreEntryScreen {
         }
 
         .score-entry-continue {
+          position: absolute;
+          bottom: clamp(120px, 15cqh, 288px);
+          left: 50%;
+          transform: translateX(-50%);
           font-size: clamp(16px, 2.12cqh, 41px);
           font-weight: 500;
           color: var(--text-secondary);
           text-align: center;
-          width: 100%;
           line-height: 1;
+          white-space: nowrap;
         }
 
         .score-entry-container-name {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: space-between;
+          justify-content: center;
+          gap: clamp(60px, 7.5cqh, 144px);
           height: 100%;
-          padding: clamp(60px, 7.6cqh, 146px) clamp(45px, 9.4cqw, 113px);
+          padding-bottom: clamp(160px, 20cqh, 384px);
           font-family: 'Google Sans Flex', Arial, sans-serif;
           animation: fadeIn 0.5s ease-in;
         }
@@ -195,7 +202,6 @@ export class ScoreEntryScreen {
           justify-content: center;
           align-items: center;
           gap: clamp(20px, 4cqw, 50px);
-          flex: 1;
         }
 
         .score-entry-letter-box {
@@ -249,7 +255,7 @@ export class ScoreEntryScreen {
 
         .score-entry-footer {
           position: absolute;
-          bottom: clamp(80px, 10cqh, 192px);
+          bottom: clamp(120px, 15cqh, 288px);
           left: 50%;
           transform: translateX(-50%);
           display: flex;
@@ -335,7 +341,7 @@ export class ScoreEntryScreen {
             <div class="score-entry-number">${score.toString()}</div>
             <div class="score-entry-game-name">${gameName}</div>
           </div>
-          <div style="visibility: hidden; height: clamp(16px, 2.12cqh, 41px);"></div>
+          <div class="score-entry-continue">Press any button to continue</div>
         </div>
       `
       // Auto-advance after 3 seconds
@@ -358,7 +364,7 @@ export class ScoreEntryScreen {
               </div>
             `).join('')}
           </div>
-          <div style="visibility: hidden; height: clamp(16px, 2.12cqh, 41px);"></div>
+          <div class="score-entry-continue">Press any button to continue</div>
         </div>
       `
 

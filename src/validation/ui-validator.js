@@ -46,10 +46,10 @@ export class UIValidator {
 
     // Check 2: Google brand colors (official Google palette)
     const GOOGLE_BRAND_COLORS = [
-      rgbToHex(...GOOGLE_COLORS.BLUE),    // #4285f4
-      rgbToHex(...GOOGLE_COLORS.RED),     // #ea4335
-      rgbToHex(...GOOGLE_COLORS.GREEN),   // #34a853
-      rgbToHex(...GOOGLE_COLORS.YELLOW),  // #fbbc04
+      rgbToHex(...GOOGLE_COLORS.BLUE),    // #428ef4
+      rgbToHex(...GOOGLE_COLORS.RED),     // #ff5145
+      rgbToHex(...GOOGLE_COLORS.GREEN),   // #38a852
+      rgbToHex(...GOOGLE_COLORS.YELLOW),  // #ffbb00
       rgbToHex(...GOOGLE_COLORS.WHITE),   // #ffffff
       '#5f6368',  // Google Gray 700 (text color)
       '#000000'   // Black
@@ -58,7 +58,7 @@ export class UIValidator {
       gameCode.toLowerCase().includes(color.toLowerCase())
     )
     if (!hasGoogleColors) {
-      errors.push('⚠️  UI should use Google brand colors (#4285F4, #EA4335, #34A853, #FBBC04, #FFFFFF)')
+      errors.push('⚠️  UI should use Google brand colors (#428EF4, #FF5145, #38A852, #FFBB00, #FFFFFF)')
     }
 
     // Check 3: Minimal UI (not too many gradients)

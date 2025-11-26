@@ -11,10 +11,10 @@
  * Official Google brand colors.
  */
 export const GOOGLE_COLORS = {
-  BLUE: [66, 133, 244],    // Google Blue #4285F4
-  RED: [234, 67, 53],      // Google Red #EA4335
-  GREEN: [52, 168, 83],    // Google Green #34A853
-  YELLOW: [251, 188, 4],   // Google Yellow #FBBC04
+  BLUE: [66, 142, 244],    // Google Blue #428EF4
+  RED: [255, 81, 69],      // Google Red #FF5145
+  GREEN: [56, 168, 82],    // Google Green #38A852
+  YELLOW: [255, 187, 0],   // Google Yellow #FFBB00
   WHITE: [255, 255, 255]
 }
 

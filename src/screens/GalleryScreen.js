@@ -221,7 +221,7 @@ export class GalleryScreen {
   createArrow(direction) {
     const arrow = document.createElement('img')
     arrow.className = `gallery-arrow gallery-arrow-${direction}`
-    arrow.src = '/conways-arcade-online/img/arrow.png'
+    arrow.src = 'img/arrow.png'
     arrow.style.cssText = `
       height: clamp(50px, 6.05cqh, 116.1px);
       cursor: pointer;
@@ -232,7 +232,7 @@ export class GalleryScreen {
     `
 
     arrow.addEventListener('mouseenter', () => {
-      // Google Blue #4285F4
+      // Google Blue #428EF4
       arrow.style.filter = 'brightness(0) saturate(100%) invert(42%) sepia(98%) saturate(1721%) hue-rotate(203deg) brightness(100%) contrast(95%)'
     })
     arrow.addEventListener('mouseleave', () => {

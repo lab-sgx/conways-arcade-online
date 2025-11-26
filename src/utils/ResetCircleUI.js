@@ -16,8 +16,8 @@ export class ResetCircleUI {
    * Color configuration
    */
   static COLORS = {
-    SOFT_RESET: '#4285F4',  // Google Blue
-    HARD_RESET: '#EA4335'   // Google Red
+    SOFT_RESET: '#428EF4',  // Google Blue
+    HARD_RESET: '#FF5145'   // Google Red
   }
 
   /**
