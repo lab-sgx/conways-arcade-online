@@ -11,7 +11,7 @@
       font-weight: 500;
       font-style: normal;
       font-display: swap;
-      src: url('/fonts/GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf') format('truetype');
+      src: url('/conways-arcade-online/fonts/GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf') format('truetype');
     }
 
     @font-face {
@@ -19,7 +19,7 @@
       font-weight: 400;
       font-style: normal;
       font-display: swap;
-      src: url('/fonts/Google-Sans-Mono-Regular.ttf') format('truetype');
+      src: url('/conways-arcade-online/fonts/Google-Sans-Mono-Regular.ttf') format('truetype');
     }
 
     @font-face {
@@ -27,7 +27,7 @@
       font-weight: 600;
       font-style: normal;
       font-display: swap;
-      src: url('/fonts/Google-Sans-Mono-SemiBold.ttf') format('truetype');
+      src: url('/conways-arcade-online/fonts/Google-Sans-Mono-SemiBold.ttf') format('truetype');
     }
 
     body {
@@ -115,15 +115,15 @@
   </div>
 
   <!-- p5.js (Local - Offline) -->
-  <script src="/lib/p5.min.js"></script>
+  <script src="/conways-arcade-online/lib/p5.min.js"></script>
   <script type="module">
     // ===== IMPORTS =====
     // IMPORTANT: Use GameRegistryMetadata.js (lightweight ~2KB), NOT GameRegistry.js (~500KB)
     // GameRegistry.js imports .txt files which are unnecessary for game-wrapper.html
     // We only need game title and paths, not full prompt/thinking texts.
-    import { getBackgroundColor, getTextColor } from '/src/utils/ThemeConstants.js'
-    import { debugLog } from '/src/utils/Logger.js'
-    import { getGameMetadataById } from '/src/installation/GameRegistryMetadata.js'
+    import { getBackgroundColor, getTextColor } from '/conways-arcade-online/src/utils/ThemeConstants.js'
+    import { debugLog } from '/conways-arcade-online/src/utils/Logger.js'
+    import { getGameMetadataById } from '/conways-arcade-online/src/installation/GameRegistryMetadata.js'
 
     // ===== INITIAL THEME FROM URL =====
     // Apply theme IMMEDIATELY to prevent white flash
@@ -183,7 +183,7 @@
         // Dynamically load the game script
         const script = document.createElement('script')
         script.type = 'module'
-        script.src = `/games/${gameName}.js`
+        script.src = `/conways-arcade-online/games/${gameName}.js`
         script.onerror = () => {
           console.error(`Failed to load game: ${gameName}`)
           document.body.innerHTML = `<h1 style="color: #EA4335;">Error: Game "${gameName}" not found</h1>`
